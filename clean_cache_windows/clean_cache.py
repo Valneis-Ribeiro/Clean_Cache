@@ -12,19 +12,18 @@ class Clean_Cache:
         self.folder_trash_path = 'rd /s /q C:\\$Recycle.Bin'
     
     def clean_folder_temp(self):
-      if self.check_computer_system():
         try:
-            try:  
-                for file in os.listdir(self.folder_temp_path):
-                    path_file = os.path.join(self.folder_temp_path, file)
-                    os.remove(path_file)
-                    print(f'Arquivos {path_file} removido com seucesso.')
-                print('Arquivos removidos com sucesso.')    
-            except OSError as o:
-                print(f'Erros ao remover os arquivos {o}')
+            if self.check_computer_system():
+                try:  
+                    for file in os.listdir(self.folder_temp_path):
+                        path_file = os.path.join(self.folder_temp_path, file)
+                        os.remove(path_file)
+                        print(f'Arquivos {path_file} removido com seucesso.')
+                    print('Arquivos removidos com sucesso.')    
+                except OSError as o:
+                    print(f'Erros ao remover os arquivos {o}')
         except:
             print('Error system')
-    
     # def clean_folder_temp_porcent(self):
     #     if self.check_computer_system:
     #         try:
@@ -41,28 +40,50 @@ class Clean_Cache:
     #             print('Error system.')            
     
     def clean_folder_prefetch(self):
-        if self.check_computer_system():
             try:
-                try:
-                    for file in os.listdir(self.folder_prefetch_path):
-                        path_file = os.path.join(self.folder_prefetch_path, file)
-                        os.remove(path_file)
-                        print(f"Arquivo {path_file} removido com sucesso.")      
-                except OSError as o:
-                    print(f'Erro {o} ao apagar os arquivos')
+                if self.check_computer_system():
+                    try:
+                        for file in os.listdir(self.folder_prefetch_path):
+                            path_file = os.path.join(self.folder_prefetch_path, file)
+                            os.remove(path_file)
+                            print(f"Arquivo {path_file} removido com sucesso.")      
+                    except OSError as o:
+                        print(f'Erro {o} ao apagar os arquivos')
             except:
                 print('Error system')
 
     def clean_folder_trash(self):
-        if self.check_computer_system():
             try:
-                subprocess.run(self.folder_trash_path, shell=True)
+                if self.check_computer_system():
+                    try:
+                        subprocess.run(self.folder_trash_path, shell=True)
+                    except OSError as o:
+                        print(f'Erro {o} ao apgar os arquivos')    
             except:
-                print('Error system ')    
+                print('Error system')
 
     def check_computer_system(self):
        if os.name == self.workspace:
           return True
        else:
           return False
-       
+
+    def check_amount_files_cache_for_clean(self):
+        path_temp = os.listdir(self.folder_temp_path)
+        path_prefetch = os.listdir(self.folder_prefetch_path)
+        amount_files_temp = len(path_temp)
+        amount_files_prefetch = len(path_prefetch)
+        all_files_sum = amount_files_temp + amount_files_prefetch
+        return path_temp, path_prefetch, all_files_sum
+
+    def get_files_size(self):   
+        amount_kb  = 0
+        for files in os.listdir(self.folder_temp_path):
+            path_files = os.path.join(self.folder_temp_path, files) 
+            size_files = os.path.getsize(path_files)
+            amount_kb += size_files
+        conversion_factor = 1024
+        amount_mb = amount_kb / conversion_factor 
+        print(amount_mb)            
+        return amount_mb
+
