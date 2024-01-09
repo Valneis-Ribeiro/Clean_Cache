@@ -12,7 +12,7 @@ class Clean_Cache:
         self.folder_trash_path = 'rd /s /q C:\\$Recycle.Bin'
     
     def clean_folder_temp(self):
-      if self.check_workspace():
+      if self.check_computer_system():
         try:
             try:  
                 for file in os.listdir(self.folder_temp_path):
@@ -23,10 +23,10 @@ class Clean_Cache:
             except OSError as o:
                 print(f'Erros ao remover os arquivos {o}')
         except:
-            print('Error Workscpace')
+            print('Error system')
     
     # def clean_folder_temp_porcent(self):
-    #     if self.check_workspace:
+    #     if self.check_computer_system:
     #         try:
     #             try:   
     #                 for file in os.listdir(self.folder_temp_porcent_path):
@@ -38,28 +38,29 @@ class Clean_Cache:
     #             except OSError as o:
     #                 print(f'Erro eo remover {o}')
     #         except:
-    #             print('Error Workspace.')            
+    #             print('Error system.')            
     
     def clean_folder_prefetch(self):
-        try:
+        if self.check_computer_system():
             try:
-                for file in os.listdir(self.folder_prefetch_path):
-                    path_file = os.path.join(self.folder_prefetch_path, file)
-                    os.remove(path_file)
-                    print(f"Arquivo {path_file} removido com sucesso.")      
-            except OSError as o:
-                print(f'Erro {o} ao apagar os arquivos')
-        except:
-            print('Error Workspace')
+                try:
+                    for file in os.listdir(self.folder_prefetch_path):
+                        path_file = os.path.join(self.folder_prefetch_path, file)
+                        os.remove(path_file)
+                        print(f"Arquivo {path_file} removido com sucesso.")      
+                except OSError as o:
+                    print(f'Erro {o} ao apagar os arquivos')
+            except:
+                print('Error system')
 
     def clean_folder_trash(self):
-        if self.check_workspace():
+        if self.check_computer_system():
             try:
                 subprocess.run(self.folder_trash_path, shell=True)
             except:
-                print('Error Workscpace')    
+                print('Error system ')    
 
-    def check_workspace(self):
+    def check_computer_system(self):
        if os.name == self.workspace:
           return True
        else:
